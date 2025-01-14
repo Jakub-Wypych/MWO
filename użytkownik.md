@@ -13,7 +13,26 @@ aby uniknąć pomyłek.
 7. Jako użytkownik, chcę otrzymać potwierdzenie zakupu (np. wydruk biletu lub 
 elektroniczny bilet), aby móc korzystać z transportu zgodnie z przepisami.
 
-## DIAGRAMY PRZYPADKÓW UŻYCIA
+## Diagramy przypadków użycia
+### Płatność za bilet
+
+1. Użytkownik wybiera metodę płatności (karta, gotówka, telefon) (Wybór metody płatności).
+2. System weryfikuje dostępność wybranej metody (Weryfikacja metody płatności).
+3. Użytkownik dokonuje płatności (np. wprowadza kartę, gotówkę, korzysta z NFC) (Realizacja płatności).
+4. System potwierdza zakończenie transakcji (Potwierdzenie transakcji).
+5. Użytkownik w dowolnym momencie może anulować proces (Anulowanie transakcji).
+
+#### Wizualizacja
+
+```mermaid
+flowchart TD
+    A(Wybór metody płatności) -.->|include| B[Weryfikacja metody płatności]
+    B --> C[Realizacja płatności]
+    C --> D[Potwierdzenie transakcji]
+    C --> E{Anulowanie transakcji?}
+    E -->|Tak| F[Anulowanie transakcji]
+    E -->|Nie| D
+```
 ### Anulowanie transakcji
 1. Użytkownik rozpoczyna proces zakupu biletu (Rozpoczęcie interakcji).
 2. W dowolnym momencie użytkownik wybiera opcję "Anuluj" (Wybranie opcji 
@@ -37,4 +56,22 @@ flowchart TD
     B -.->|include| C(Komunikat o anulowaniu)
     C --> C1(Reset interfejsu)
     D[Zapis powodu anulowania] -.->|extend| B
+```
+
+## Wspólny diagram przypadków użycia
+
+```mermaid
+flowchart TD
+    Aktor --> A
+    Aktor((Aktor użytkownik)) -->A0
+    A0(Rozpoczęcie interakcji) --> B0(Wybranie opcji anulowania)
+    B0 -.->|include| C0(Komunikat o anulowaniu)
+    C0 --> C01(Reset interfejsu)
+    D0[Zapis powodu anulowania] -.->|extend| B0
+    A(Wybór metody płatności) -.->|include| B[Weryfikacja metody płatności]
+    B --> C[Realizacja płatności]
+    C --> D[Potwierdzenie transakcji]
+    C --> E{Anulowanie transakcji?}
+    E -->|Tak| F[Anulowanie transakcji]
+    E -->|Nie| D 
 ```
