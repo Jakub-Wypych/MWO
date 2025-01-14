@@ -32,7 +32,7 @@ anulowania).
 #### Wizualizacja
 ```mermaid
 flowchart TD
-    Aktor((Aktor system biletowy)) -->A
+    Aktor((Aktor użytkownik)) -->A
     A(Rozpoczęcie interakcji) --> B(Wybranie opcji anulowania)
     B -.->|include| C(Komunikat o anulowaniu)
     C --> C1(Reset interfejsu)
