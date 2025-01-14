@@ -12,3 +12,29 @@ biletomatu bez względu na znajomość języka lokalnego.
 aby uniknąć pomyłek.
 7. Jako użytkownik, chcę otrzymać potwierdzenie zakupu (np. wydruk biletu lub 
 elektroniczny bilet), aby móc korzystać z transportu zgodnie z przepisami.
+
+## DIAGRAMY PRZYPADKÓW UŻYCIA
+### Anulowanie transakcji
+1. Użytkownik rozpoczyna proces zakupu biletu (Rozpoczęcie interakcji).
+2. W dowolnym momencie użytkownik wybiera opcję "Anuluj" (Wybranie opcji 
+anulowania).
+3. System wyświetla komunikat potwierdzający anulowanie transakcji (Komunikat 
+o anulowaniu).
+4. System resetuje interfejs do ekranu głównego (Reset interfejsu).
+Relacje:
+
+• Include: Wyświetlenie komunikatu potwierdzającego anulowanie (Komunikat o 
+anulowaniu).
+
+• Extend: Zapisanie powodu anulowania (opcjonalnie) (Zapis powodu 
+anulowania).
+
+#### Wizualizacja
+```mermaid
+flowchart TD
+    Aktor((Aktor system biletowy)) -->A
+    A(Rozpoczęcie interakcji) --> B(Wybranie opcji anulowania)
+    B -.->|include| C(Komunikat o anulowaniu)
+    C --> C1(Reset interfejsu)
+    D[Zapis powodu anulowania] -.->|extend| B
+```
