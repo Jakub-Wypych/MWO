@@ -12,3 +12,24 @@ biletomatu bez względu na znajomość języka lokalnego.
 aby uniknąć pomyłek.
 7. Jako użytkownik, chcę otrzymać potwierdzenie zakupu (np. wydruk biletu lub 
 elektroniczny bilet), aby móc korzystać z transportu zgodnie z przepisami.
+
+## Diagramy przypadków użycia
+### Płatność za bilet
+
+1. Użytkownik wybiera metodę płatności (karta, gotówka, telefon) (Wybór metody płatności).
+2. System weryfikuje dostępność wybranej metody (Weryfikacja metody płatności).
+3. Użytkownik dokonuje płatności (np. wprowadza kartę, gotówkę, korzysta z NFC) (Realizacja płatności).
+4. System potwierdza zakończenie transakcji (Potwierdzenie transakcji).
+5. Użytkownik w dowolnym momencie może anulować proces (Anulowanie transakcji).
+
+#### Wizualizacja
+
+```mermaid
+flowchart TD
+    A(Wybór metody płatności) -.->|include| B[Weryfikacja metody płatności]
+    B --> C[Realizacja płatności]
+    C --> D[Potwierdzenie transakcji]
+    C --> E{Anulowanie transakcji?}
+    E -->|Tak| F[Anulowanie transakcji]
+    E -->|Nie| D
+```
