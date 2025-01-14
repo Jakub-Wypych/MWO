@@ -24,3 +24,38 @@ flowchart TD
     B --> C[Wyświetlenie biletów]
     C --> D[Oczekiwanie na wybór użytkownika]
 ```
+### Dostarczanie listy biletów do biletomatu
+1. System biletowy odbiera żądanie od biletomatu dotyczące listy biletów 
+(Odebranie żądania listy biletów).
+2. System biletowy sprawdza aktualne taryfy i typy biletów w bazie danych 
+(Sprawdzenie bazy taryf).
+3. System biletowy przesyła listę dostępnych biletów do biletomatu (Przesłanie 
+listy biletów).
+Relacje:
+
+• Include: Sprawdzenie bazy taryf (Weryfikacja taryf).
+
+• Extend: Obsługa błędów komunikacji (np. brak połączenia z biletomatem) (Błąd 
+komunikacji).
+
+#### Wizualizacja
+```mermaid
+flowchart TD
+    Aktor((Aktor system biletowy)) -->A
+    A(Odebranie żądania listy biletów) -.->|include| B(Sprawdzenie bazy taryf)
+    B --> C(Przesłanie listy biletów)
+    B -.->|extend| D[Błąd komunikacji]
+```
+
+## Wspólny diagram przypadków użycia
+```mermaid
+flowchart TD
+    A0[Uruchomienie ekranu powitalnego] --> B0[Pobranie listy biletów]
+    B0 --> C0[Wyświetlenie biletów]
+    C0 --> D0[Oczekiwanie na wybór użytkownika]
+    Aktor --> A0
+    Aktor((Aktor system biletowy)) -->A
+    A(Odebranie żądania listy biletów) -.->|include| B(Sprawdzenie bazy taryf)
+    B --> C(Przesłanie listy biletów)
+    B -.->|extend| D[Błąd komunikacji]
+```

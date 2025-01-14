@@ -33,3 +33,45 @@ flowchart TD
     E -->|Tak| F[Anulowanie transakcji]
     E -->|Nie| D
 ```
+### Anulowanie transakcji
+1. Użytkownik rozpoczyna proces zakupu biletu (Rozpoczęcie interakcji).
+2. W dowolnym momencie użytkownik wybiera opcję "Anuluj" (Wybranie opcji 
+anulowania).
+3. System wyświetla komunikat potwierdzający anulowanie transakcji (Komunikat 
+o anulowaniu).
+4. System resetuje interfejs do ekranu głównego (Reset interfejsu).
+Relacje:
+
+• Include: Wyświetlenie komunikatu potwierdzającego anulowanie (Komunikat o 
+anulowaniu).
+
+• Extend: Zapisanie powodu anulowania (opcjonalnie) (Zapis powodu 
+anulowania).
+
+#### Wizualizacja
+```mermaid
+flowchart TD
+    Aktor((Aktor użytkownik)) -->A
+    A(Rozpoczęcie interakcji) --> B(Wybranie opcji anulowania)
+    B -.->|include| C(Komunikat o anulowaniu)
+    C --> C1(Reset interfejsu)
+    D[Zapis powodu anulowania] -.->|extend| B
+```
+
+## Wspólny diagram przypadków użycia
+
+```mermaid
+flowchart TD
+    Aktor --> A
+    Aktor((Aktor użytkownik)) -->A0
+    A0(Rozpoczęcie interakcji) --> B0(Wybranie opcji anulowania)
+    B0 -.->|include| C0(Komunikat o anulowaniu)
+    C0 --> C01(Reset interfejsu)
+    D0[Zapis powodu anulowania] -.->|extend| B0
+    A(Wybór metody płatności) -.->|include| B[Weryfikacja metody płatności]
+    B --> C[Realizacja płatności]
+    C --> D[Potwierdzenie transakcji]
+    C --> E{Anulowanie transakcji?}
+    E -->|Tak| F[Anulowanie transakcji]
+    E -->|Nie| D 
+```
