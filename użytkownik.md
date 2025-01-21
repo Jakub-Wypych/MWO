@@ -75,3 +75,43 @@ flowchart TD
     E -->|Tak| F[Anulowanie transakcji]
     E -->|Nie| D 
 ```
+
+## Diagram sekwencji dla przypadku użycia "Anulowanie transakcji"
+
+```mermaid
+sequenceDiagram
+    actor Użytkownik
+    participant Interfejs płatności
+    participant Serwer aplikacji
+    participant Baza danych
+
+    Użytkownik->>Interfejs płatności: Rozpoczęcie interakcji
+    activate Interfejs płatności
+    Użytkownik->>Interfejs płatności: Wysłanie id transakcji do anulowania
+    Interfejs płatności->>Serwer aplikacji: Przekazanie danych
+    activate Serwer aplikacji
+    Serwer aplikacji->>Baza danych: Wysłanie zapytania
+    activate Baza danych
+    alt Zapytanie powiodło się
+        Baza danych-->>Serwer aplikacji: informacja o sukcesie
+        deactivate Baza danych
+        Serwer aplikacji-->>Interfejs płatności: informacja o sukcesie
+        deactivate Serwer aplikacji
+        Interfejs płatności->>Użytkownik: Pokazanie informacji o poprawnym anulowniu transakcji
+        activate Użytkownik
+        deactivate Użytkownik
+        activate Baza danych
+        activate Serwer aplikacji        
+    else Zapytanie nie powiodło się
+        Baza danych-->>Serwer aplikacji: informacja o błędzie
+        deactivate Baza danych
+        Serwer aplikacji-->>Interfejs płatności: informacja o błędzie
+        deactivate Serwer aplikacji
+        Interfejs płatności->>Użytkownik: Pokazanie informacji o błędzie podczas próby anulowania transakcji
+        activate Użytkownik
+    end
+    Użytkownik-->>Interfejs płatności: Potwierdzenie przeczytania komunikatu
+    deactivate Użytkownik
+    Interfejs płatności-->>Użytkownik: Reset interfejsu i powrót do poprzedniego ekranu
+    deactivate Interfejs płatności  
+```
