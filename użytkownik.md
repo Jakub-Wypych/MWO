@@ -76,8 +76,96 @@ flowchart TD
     E -->|Nie| D 
 ```
 
-## Diagram sekwencji dla przypadku użycia "Anulowanie transakcji"
+## DIAGRAMY SEKWENCJI
+### Płatność za bilet
+AKTOR: UŻYTKOWNIK
+OBIEKTY: INTERFEJS, SERWER
+KOLEJNOSC KOMUNIKATÓW: 
+1. UŻYTKOWNIK WYBIERA METODA PŁATNOŚCI NA INTERFEJSIE
+2. INTERFEJS PRZEKAZUJE DANE DO SERWERA DLA WERYFIKACJI
+3. SERWER WERYFIKUJE DANE I ZWRACA WYNIK DO INTERFEJSU
+4. INTERFEJS PROSI UŻYTKOWNIKA O DOKONANIA PŁATNOŚCI
+5. UŻYTKOWNIK DOKONUJE PŁATNOŚCI
+6. INTERFEJS PRZEKAZUJE DANE DO SERWERA DLA WERYFIKACJI
+7. SERWER WERYFIKUJE DANE
+8. SERWER REALIZUJE PŁATNOŚĆ I ZWRACA WYNIK DO INTERFEJSU
+9. INTEREFEJS WYŚWIETLA KOMUNIKAT O REALIZACJI PŁATNOŚCI
 
+SCENARIUSZ ALTERNATYWNY 1 ( BŁAD WYBORU PŁATNOŚCI ):
+1. UŻYTKOWNIK WYBIERA METODA PŁATNOŚCI NA INTERFEJSIE
+2. INTERFEJS PRZEKAZUJE DANE DO SERWERA DLA WERYFIKACJI
+3. SERWER WERYFIKUJE DANE I ZWRACA BŁEDNY WYNIK DO INTERFEJSU
+4. INTERFEJS WYŚWIETLA KOMUNIKAT BŁĄDU WYBORU PŁATNOŚCI
+
+SCENARIUSZ ALTERNATYWNY 2 ( BŁAD DOKONANIA PŁATNOŚCI ):
+1. UŻYTKOWNIK WYBIERA METODA PŁATNOŚCI NA INTERFEJSIE
+2. INTERFEJS PRZEKAZUJE DANE DO SERWERA DLA WERYFIKACJI
+3. SERWER WERYFIKUJE DANE I ZWRACA WYNIK DO INTERFEJSU
+4. INTERFEJS PROSI O DOKONANIA PŁATNOŚCI
+5. UŻYTKOWNIK DOKONUJE PŁATNOŚCI
+6. INTERFEJS PRZEKAZUJE DANE DO SERWERA DLA WERYFIKACJI
+7. SERWER WERYFIKUJE DANE I ZWRACA BŁEDNY WYNIK DO INTERFEJSU
+8. INTERFEJS WYŚWIETLA KOMUNIKAT BŁĄDU DOKONANIA PŁATNOŚCI
+
+SCENARIUSZ ALTERNATYWNY 3 ( ANULOWANIE TRANSAKCJI ):
+1. UZYTKOWNIKA WYBIERA OPCJE ANULOWANIA TRANSAKCJI
+2. INTERFEJS PRZEKAZUJE DANE DO SERWERA
+3. SERWER ANULUJE TRANSAKCJE
+4. INTERFEJS POKAZUJE INFORMACJE O ANULOWANIU TRANSAKCJI
+
+#### WIZUALIZACJA DIAGRAMU SEKWENCJI
+```mermaid
+sequenceDiagram
+    PARTICIPANT USER AS UŻYTKOWNIK
+    PARTICIPANT UI AS INTERFEJS
+    PARTICIPANT SR AS SERWER
+
+    USER->>UI: Wybór płatności
+    UI->>SR: Weryfikacja danych
+    ALT WYBÓR PŁATNOŚCI JEST POZYTYWNE
+        SR-->>UI: Pozytywny wynik weryfikacji
+        UI-->>USER: Wyświetlenie prośby o dokonania płatności
+        USER->>UI: Dokonanie płatności
+        UI->>SR: Weryfikacja płatności
+        ALT DOKONANIE PŁATNOŚCI JEST POZYTYWNE
+            SR->>SR: Dokonanie płatności
+            SR-->>UI: Pozytywny wynik weryfikacji
+            UI-->>USER: Wyświetlenie komunikatu o realizacji płatności
+        ELSE
+            SR-->>UI: Błędny wynik weryfikacji
+            UI-->>USER: Wyświetlenie komunikatu o błędzie dokonania płatności
+        END
+    ELSE WYBÓR PŁATNOŚCI JEST NEGATYWNE
+        SR-->>UI: Błędny wynik weryfikacji
+        UI-->>USER: Wyświetlenie komunikatu o błędzie wyboru płatności
+    END
+    OPT ANULOWANIE PŁATNOŚCI
+        USER-)UI: Wybór anulowania transakcji
+        UI->>SR: Anuluj transakcje
+        SR-->>UI: Anulowanie transakcji
+        UI-->>USER: Wyświetlenie komunikatu o anulowaniu transakcji
+    END
+```
+### Anulowanie transakcji
+**AKTOR**: Użytkownik
+**OBIEKTY**: Interfejs płatności, serwer aplikacji, baza danych
+**KOLEJNOSC KOMUNIKATÓW (scenariusz główny)**: 
+1. Użytkownik rozpoczyna interakcje (płatność)
+2. Użytkownik wysyła id transakcji do anulowania, do interfejsu.
+3. Interfejs przekazuje dane do serwera.
+4. Serwer wysyła zapytanie do bazy danych.
+5. Baza zwraca informacje o sukcesie
+6. Interfejs informuje użytkownika o poprawnym anulowaniu.
+7. Użytkownik potwierdza przeczytanie komunikatu
+8. Interfejs zostaje zresetowany
+
+**SCENARIUSZ ALTERNATYWNY 1 (błędne id transakcji)**:
+4. -||-
+5a. Baza zwraca informacje o błędzie. 
+6a. Interfejs informuje użytkownika o błędzie
+JOIN -> 7
+
+#### Wizualizacja diagramu sekwencji
 ```mermaid
 sequenceDiagram
     actor Użytkownik
