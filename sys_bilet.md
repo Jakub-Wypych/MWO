@@ -60,6 +60,7 @@ flowchart TD
     B -.->|extend| D[Błąd komunikacji]
 ```
 
+=======
 ## DIAGRAMY SEKWENCJI
 ### Wyświetlenie dostępnych biletów
 AKTOR: UŻYTKOWNIK
@@ -96,4 +97,33 @@ sequenceDiagram
         BT-)UI: Wyświetl komunikat o braku danych
     END
         BT->>USER: Oczekiwanie na wybór użytkownika
+```
+
+## Diagram sekwencji "Dostarczenie listy biletów do biletomatu"
+
+```mermaid
+sequenceDiagram
+    participant BT as Biletomat
+    participant SW as Serwer
+    participant DB as Baza Danych
+
+    activate BT
+        BT ->> SW: Wysłanie żądania o dostarczenie listy biletów
+        activate SW
+    alt Serwer dostępny
+        SW ->> DB: Wysłanie żądania o dostarczenie aktualnych taryf i typów biletów
+        activate DB
+        DB -->> SW: aktualne taryfy i typy biletów
+        deactivate DB
+        SW ->> SW: Stworzenie listy biletów
+        SW -->> BT: lista dostępnych biletów
+    else Serwer niedostępny
+        deactivate SW
+        deactivate BT    
+        activate BT
+        activate SW
+        SW -->> BT: informacja o błędzie
+        deactivate SW
+    end
+    deactivate BT
 ```
