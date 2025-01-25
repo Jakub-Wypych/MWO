@@ -113,7 +113,7 @@ SCENARIUSZ ALTERNATYWNY 3 ( ANULOWANIE TRANSAKCJI ):
 3. SERWER ANULUJE TRANSAKCJE
 4. INTERFEJS POKAZUJE INFORMACJE O ANULOWANIU TRANSAKCJI
 
-### WIZUALIZACJA DIAGRAMU SEKWENCJI
+#### WIZUALIZACJA DIAGRAMU SEKWENCJI
 ```mermaid
 sequenceDiagram
     PARTICIPANT USER AS UŻYTKOWNIK
@@ -145,5 +145,61 @@ sequenceDiagram
         SR-->>UI: Anulowanie transakcji
         UI-->>USER: Wyświetlenie komunikatu o anulowaniu transakcji
     END
+```
+### Anulowanie transakcji
+**AKTOR**: Użytkownik
+**OBIEKTY**: Interfejs płatności, serwer aplikacji, baza danych
+**KOLEJNOSC KOMUNIKATÓW (scenariusz główny)**: 
+1. Użytkownik rozpoczyna interakcje (płatność)
+2. Użytkownik wysyła id transakcji do anulowania, do interfejsu.
+3. Interfejs przekazuje dane do serwera.
+4. Serwer wysyła zapytanie do bazy danych.
+5. Baza zwraca informacje o sukcesie
+6. Interfejs informuje użytkownika o poprawnym anulowaniu.
+7. Użytkownik potwierdza przeczytanie komunikatu
+8. Interfejs zostaje zresetowany
 
+**SCENARIUSZ ALTERNATYWNY 1 (błędne id transakcji)**:
+4. -||-
+5a. Baza zwraca informacje o błędzie. 
+6a. Interfejs informuje użytkownika o błędzie
+JOIN -> 7
+
+#### Wizualizacja diagramu sekwencji
+```mermaid
+sequenceDiagram
+    actor Użytkownik
+    participant Interfejs płatności
+    participant Serwer aplikacji
+    participant Baza danych
+
+    Użytkownik->>Interfejs płatności: Rozpoczęcie interakcji
+    activate Interfejs płatności
+    Użytkownik->>Interfejs płatności: Wysłanie id transakcji do anulowania
+    Interfejs płatności->>Serwer aplikacji: Przekazanie danych
+    activate Serwer aplikacji
+    Serwer aplikacji->>Baza danych: Wysłanie zapytania
+    activate Baza danych
+    alt Zapytanie powiodło się
+        Baza danych-->>Serwer aplikacji: informacja o sukcesie
+        deactivate Baza danych
+        Serwer aplikacji-->>Interfejs płatności: informacja o sukcesie
+        deactivate Serwer aplikacji
+        Interfejs płatności->>Użytkownik: Pokazanie informacji o poprawnym anulowniu transakcji
+        activate Użytkownik
+        deactivate Użytkownik
+        activate Baza danych
+        activate Serwer aplikacji        
+    else Zapytanie nie powiodło się
+        Baza danych-->>Serwer aplikacji: informacja o błędzie
+        deactivate Baza danych
+        Serwer aplikacji-->>Interfejs płatności: informacja o błędzie
+        deactivate Serwer aplikacji
+        Interfejs płatności->>Użytkownik: Pokazanie informacji o błędzie podczas próby anulowania transakcji
+        activate Użytkownik
+    end
+    Użytkownik-->>Interfejs płatności: Potwierdzenie przeczytania komunikatu
+    deactivate Użytkownik
+    Interfejs płatności-->>Użytkownik: Reset interfejsu i powrót do poprzedniego ekranu
+    deactivate Interfejs płatności  
 ```
