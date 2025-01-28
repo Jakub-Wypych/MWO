@@ -60,7 +60,6 @@ flowchart TD
     B -.->|extend| D[Błąd komunikacji]
 ```
 
-=======
 ## DIAGRAMY SEKWENCJI
 ### Wyświetlenie dostępnych biletów
 AKTOR: UŻYTKOWNIK
@@ -126,4 +125,73 @@ sequenceDiagram
         deactivate SW
     end
     deactivate BT
+```
+
+## Diagramy klas
+
+### "Wyświetlenie dostępnych biletów"
+
+```mermaid
+classDiagram
+
+class TicketMachineInterface
+TicketMachineInterface: +displayWelcomeScreen()
+TicketMachineInterface: +showError(String)
+
+class TicketMachineService
+TicketMachineService: +getAvailableTicketsList() TicketsList
+
+class TicketsList
+TicketsList: isEmpty() bool
+
+class Ticket
+Ticket: +price int
+Ticket: +name String
+
+class Database
+Database: +fetchTickets() TicketsList
+
+TicketMachineService --> TicketMachineInterface
+TicketMachineService ..> TicketsList
+TicketMachineService --> Database
+TicketsList *-- Ticket : 0..*
+```
+
+### "Dostarczenie listy biletów do biletomatu"
+#### OPIS KLAS
+#### KLASY
+##### Biletomat
+ - METODY: `VOID SERWER_NOT_AVAILABLE()`
+##### Serwer
+ - ATRYBUTY: `LIST<BILET> BILETY`
+ - METODY: `LIST<BILET> GET_TICKETS()`, `LIST<BILET> CREATE_TICKET_LIST(BILET[] BILETY)`
+##### BazaDanych
+ - ATRYBUTY: `BILET[] BILETY`
+ - METODY: `BILETY[] GET_TICKETS()`
+##### Bilet
+ - ATRYBUTY: `STRING TYPE`, `STRING TARYFA`
+#### WIZUALIZACJA
+``` mermaid
+classDiagram
+    class Biletomat{
+        +VOID SERWER_NOT_AVAILABLE()
+    }
+    class Serwer{
+        +LIST<BILET> BILETY
+        +LIST<BILET> GET_TICKETS()
+        +LIST<BILET> CREATE_TICKET_LIST(BILET[] BILETY)VOID SEND_ID(INT ID)
+        +VOID RESET()
+    }
+    class BazaDanych{
+        +BILET[] BILETY
+        +BILETY[] GET_TICKETS()
+    }
+    class Bilet{
+        +STRING TYPE
+        +STRING TARYFA
+    }
+
+    Biletomat --> Serwer : pyta
+    Serwer --> BazaDanych : pyta
+    BazaDanych --> Bilet : przechowuje
 ```
