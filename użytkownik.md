@@ -203,3 +203,62 @@ sequenceDiagram
     Interfejs płatności-->>Użytkownik: Reset interfejsu i powrót do poprzedniego ekranu
     deactivate Interfejs płatności  
 ```
+
+## Diagramy klas
+
+### "Płatność za bilet"
+
+```mermaid
+---
+title: Płatność za bilet
+---
+classDiagram
+    class UserScreen
+    UserScreen: +onClicked()
+
+    class PaymentScreen
+    PaymentScreen: +display()
+    PaymentScreen: +onClicked()
+
+    class InfoBox
+    InfoBox: +displayError(String)
+
+    class TicketMachineService
+    TicketMachineService: +verifyPaymentMethod(PaymentMethod) bool
+    TicketMachineService: +verifyPaymentData(PaymentData) bool
+    TicketMachineService: +cancelTransaction()
+
+    class PaymentData
+    PaymentData: +firstName
+    PaymentData: +surname
+    PaymentData: +address    
+
+    class Database
+    Database: +fetchPaymentMethodAvailable(PaymentMethod) bool
+
+    class PaymentMethod
+    <<enumeration>> PaymentMethod 
+    PaymentMethod: Card
+    PaymentMethod: BankTransfer
+    PaymentMethod: Blik
+    PaymentMethod: PayPal
+    PaymentMethod: Bitcoin
+
+    class ExternalPaymentService
+    ExternalPaymentService: +makePayment(PaymentData) bool
+
+
+    UserScreen --> TicketMachineService
+    TicketMachineService --> UserScreen
+    
+    PaymentScreen --> TicketMachineService
+    TicketMachineService --> PaymentScreen
+
+    TicketMachineService --> InfoBox
+
+    TicketMachineService ..> PaymentData
+    TicketMachineService ..> PaymentMethod
+
+    TicketMachineService --> Database
+    TicketMachineService --> ExternalPaymentService
+```

@@ -60,7 +60,6 @@ flowchart TD
     B -.->|extend| D[Błąd komunikacji]
 ```
 
-=======
 ## DIAGRAMY SEKWENCJI
 ### Wyświetlenie dostępnych biletów
 AKTOR: UŻYTKOWNIK
@@ -128,20 +127,50 @@ sequenceDiagram
     deactivate BT
 ```
 
-# DIAGRAM KLASY Dostarczenie listy biletów do biletomatu
-## OPIS KLAS
-### KLASY
-#### Biletomat
+## Diagramy klas
+
+### "Wyświetlenie dostępnych biletów"
+
+```mermaid
+classDiagram
+
+class TicketMachineInterface
+TicketMachineInterface: +displayWelcomeScreen()
+TicketMachineInterface: +showError(String)
+
+class TicketMachineService
+TicketMachineService: +getAvailableTicketsList() TicketsList
+
+class TicketsList
+TicketsList: isEmpty() bool
+
+class Ticket
+Ticket: +price int
+Ticket: +name String
+
+class Database
+Database: +fetchTickets() TicketsList
+
+TicketMachineService --> TicketMachineInterface
+TicketMachineService ..> TicketsList
+TicketMachineService --> Database
+TicketsList *-- Ticket : 0..*
+```
+
+### "Dostarczenie listy biletów do biletomatu"
+#### OPIS KLAS
+#### KLASY
+##### Biletomat
  - METODY: `VOID SERWER_NOT_AVAILABLE()`
-#### Serwer
+##### Serwer
  - ATRYBUTY: `LIST<BILET> BILETY`
  - METODY: `LIST<BILET> GET_TICKETS()`, `LIST<BILET> CREATE_TICKET_LIST(BILET[] BILETY)`
-#### BazaDanych
+##### BazaDanych
  - ATRYBUTY: `BILET[] BILETY`
  - METODY: `BILETY[] GET_TICKETS()`
-#### Bilet
+##### Bilet
  - ATRYBUTY: `STRING TYPE`, `STRING TARYFA`
-### WIZUALIZACJA
+#### WIZUALIZACJA
 ``` mermaid
 classDiagram
     class Biletomat{
