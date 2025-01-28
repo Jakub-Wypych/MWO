@@ -203,3 +203,42 @@ sequenceDiagram
     Interfejs płatności-->>Użytkownik: Reset interfejsu i powrót do poprzedniego ekranu
     deactivate Interfejs płatności  
 ```
+
+# DIAGRAM KLASY Anulowanie transakcji
+## OPIS KLASY
+### KLASY
+#### Urzytkownik
+ - METODY: `VOID SUCCESS()`, `VOID FAILURE()`
+#### InterfejsPłatnośici
+ - ATRYBUTY: `INT ID`
+ - METODY: `VOID START()`, `VOID SEND_ID(INT ID)`, `VOID RESET()`
+#### SerwerAplikacji
+ - METODY: `BOOLEAN CHECK_ID(ID)`
+#### BazaDanych
+ - ATRYBUTY: `INT[] ID`
+ - METODY: `BOOLEAN VERYFIY(ID)`
+### WIZUALIZACJA
+``` mermaid
+classDiagram
+    class Urzytkownik{
+        +VOID SUCCESS()
+        +VOID FAILURE()
+    }
+    class InterfejsPłatnośici{
+        +INT ID
+        +VOID START()
+        +VOID SEND_ID(INT ID)
+        +VOID RESET()
+    }
+    class SerwerAplikacji{
+        +BOOLEAN CHECK_ID(ID)
+    }
+    class BazaDanych{
+        +INT[] ID
+        +BOOLEAN VERYFIY(ID)
+    }
+
+    Urzytkownik --> InterfejsPłatnośici : Urzywa
+    InterfejsPłatnośici --> SerwerAplikacji : pyta
+    SerwerAplikacji --> BazaDanych : pyta
+```
