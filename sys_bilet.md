@@ -127,3 +127,34 @@ sequenceDiagram
     end
     deactivate BT
 ```
+
+## Diagramy klas
+
+### "Wyświetlenie dostępnych biletów"
+
+```mermaid
+classDiagram
+
+class TicketMachineInterface
+TicketMachineInterface: +displayWelcomeScreen()
+TicketMachineInterface: +showError(String)
+
+class TicketMachineService
+TicketMachineService: +getAvailableTicketsList() TicketsList
+
+class TicketsList
+TicketsList: isEmpty() bool
+
+class Ticket
+Ticket: +price int
+Ticket: +name String
+
+class Database
+Database: +fetchTickets() TicketsList
+
+TicketMachineService --> TicketMachineInterface
+TicketMachineService ..> TicketsList
+TicketMachineService --> Database
+TicketsList *-- Ticket : 0..*
+
+```
